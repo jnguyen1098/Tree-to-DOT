@@ -5,6 +5,7 @@
 /* user may change these */
 #define BALANCE_AVL 0
 #define NODES       100
+#define MAXVAL      1000
 
 /* inline functions */
 #define MAX(x,y) (x > y ? x : y)
@@ -53,7 +54,7 @@ int main(void)
 
     /* add random numbers to tree */
     for (int iter = 1; iter <= NODES; iter++)
-        add(&root, rand() % 100 + 1, BALANCE_AVL ? AVL : NORMAL);
+        add(&root, rand() % MAXVAL + 1, BALANCE_AVL ? AVL : NORMAL);
 
     /* write to stdout (or file) */
     if (!write_file(root, stdout))
