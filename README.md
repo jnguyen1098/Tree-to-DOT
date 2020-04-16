@@ -4,9 +4,10 @@ This is a proof-of-concept C program that converts integer binary trees into a r
 ## How to Run
 Just compile and run it (e.g. `gcc tree_to_dot.c && ./a.out`) and it will output (to `stdout`) the resultant graph (or tree in this case).
 
-Feel free to modify the two macro variables, `BALANCE_AVL` and `NODES`.
+Feel free to modify the macro variables to test different scenarios.
 - `BALANCE_AVL` determines whether or not the resultant graph will be sorted (`= 1`) or not (`= 0`).
 - `NODES` determines the number of nodes in the resultant graph.
+- `MAXVAL` is the maximum value of a random number being inserted into the tree. This proof-of-concept uses `rand()`, which does not guard against values already inputted before, so upon insertion of a value that already exists, nothing happens. That means if your `MAXVAL` is less than `NODES`, `NODES` degenerates into the value of `MAXVAL` due to the pigeonhole principle (@Sawada). _Make sure this value is high enough._
 
 Examples of these two variables being changed are shown below.
 
