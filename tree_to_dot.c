@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define SUCCESS 1
-#define FAIL    0
+/* user may change these */
+#define BALANCE_AVL 0
+#define NODES       100
 
 /* inline functions */
 #define MAX(x,y) (x > y ? x : y)
@@ -51,8 +52,8 @@ int main(void)
     srand((unsigned int)time(NULL));
 
     /* add random numbers to tree */
-    for (int iter = 1; iter <= 20; iter++)
-        add(&root, rand() % 100 + 1, AVL);
+    for (int iter = 1; iter <= NODES; iter++)
+        add(&root, rand() % 100 + 1, BALANCE_AVL ? AVL : NORMAL);
 
     /* write to stdout (or file) */
     if (!write_file(root, stdout))
@@ -65,7 +66,7 @@ int main(void)
 
 int write_file(Node *tree, FILE *infp)
 {
-    if (!tree) return FAIL;
+    if (!tree) return 0;
 
     // so I don't pass fp into write_line every time
     fp = infp;
@@ -79,7 +80,7 @@ int write_file(Node *tree, FILE *infp)
 
     /* housekeeping */
     fprintf(fp, "}");
-    return SUCCESS;
+    return 1;
 }
 
 void write_line(Node *tree)
