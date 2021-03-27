@@ -5,7 +5,7 @@
 #include "../cdot/cdot.h"
 
 /* user may change these */
-#define BALANCE_AVL 1
+#define BALANCE_AVL 0
 #define NODES       100
 #define MAXVAL      1000
 
