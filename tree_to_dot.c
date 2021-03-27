@@ -60,7 +60,7 @@ int main(void)
         add(&root, rand() % MAXVAL + 1, BALANCE_AVL ? AVL : NORMAL);
 
     /* write to stdout (or file) */
-    if (write_file(root, stdout) == NULL)
+    if (write_file(root, stdout) == 0)
         fprintf(stderr, "Write failed\n");
 
     /* housekeeping */
