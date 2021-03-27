@@ -2,7 +2,8 @@
 This is a proof-of-concept C program that converts integer binary trees into a representation that can be opened in any graph description language compiler (such as [this](https://dreampuf.github.io/GraphvizOnline/)) supporting the [DOT language](https://en.wikipedia.org/wiki/DOT_(graph_description_language)). 
 
 ## How to Run
-Just compile and run it (e.g. `gcc tree_to_dot.c && ./a.out`) and it will output (to `stdout`) the resultant graph (or tree in this case).
+
+`make run`
 
 Feel free to modify the macro variables to test different scenarios.
 - `BALANCE_AVL` determines whether or not the resultant graph will be sorted (`= 1`) or not (`= 0`).
