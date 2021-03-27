@@ -4,7 +4,7 @@ EXE = tree
 OBJS = tree_to_dot.o
 DEPS = cdot/cdot.h
 
-SRC = tree_to_dot.c
+SRC = "."
 INC = cdot
 
 all $(EXE): $(OBJS) $(DEPS)
