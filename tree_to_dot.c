@@ -6,8 +6,8 @@
 
 /* user may change these */
 #define BALANCE_AVL 0
-#define NODES       100
-#define MAXVAL      1000
+#define NODES 100
+#define MAXVAL 1000
 
 /* inline functions */
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
@@ -19,10 +19,10 @@ typedef enum writemode_enum { NORMAL, AVL } WriteMode;
 
 /* node definition */
 typedef struct tree_node {
-    int data;
+    int               data;
     struct tree_node *left;
     struct tree_node *right;
-    int height;
+    int               height;
 } Node;
 
 /* write file to output.dot */
@@ -46,7 +46,7 @@ void leftRotate(Node **x);
 
 /* yeah */
 static FILE *fp;
-static int i;
+static int   i;
 
 int main(void)
 {
@@ -138,11 +138,9 @@ void add(Node **tree, int data, WriteMode mode)
     } else {
         if ((*tree)->data > data) {
             add(&((*tree)->left), data, mode);
-        }
-        else if ((*tree)->data < data) {
+        } else if ((*tree)->data < data) {
             add(&((*tree)->right), data, mode);
-        }
-        else { // equal case...undefined
+        } else {  // equal case...undefined
             return;
         }
     }
@@ -179,7 +177,6 @@ void add(Node **tree, int data, WriteMode mode)
     }
 }
 
-
 Node *create(int data)
 {
     Node *ret;
@@ -187,8 +184,8 @@ Node *create(int data)
         fprintf(stderr, "Could not create node for data %d\n", data);
         exit(EXIT_FAILURE);
     }
-    ret->data = data;
-    ret->height = 1; // height starts at 1
+    ret->data   = data;
+    ret->height = 1;  // height starts at 1
     return ret;
 }
 
@@ -202,33 +199,30 @@ void free_tree(Node *tree)
     free(tree);
 }
 
-
 void rightRotate(Node **y)
 {
-    Node *x = (*y)->left;
+    Node *x  = (*y)->left;
     Node *T2 = x->right;
 
-    x->right = (*y);
+    x->right   = (*y);
     (*y)->left = T2;
 
     (*y)->height = MAX(HEIGHT((*y)->left), HEIGHT((*y)->right)) + 1;
-    x->height = MAX(HEIGHT(x->left), HEIGHT(x->right)) + 1;
+    x->height    = MAX(HEIGHT(x->left), HEIGHT(x->right)) + 1;
 
     *y = x;
 }
 
 void leftRotate(Node **x)
 {
-    Node *y = (*x)->right;
+    Node *y  = (*x)->right;
     Node *T2 = y->left;
 
-    y->left = (*x);
+    y->left     = (*x);
     (*x)->right = T2;
 
     (*x)->height = MAX(HEIGHT((*x)->left), HEIGHT((*x)->right)) + 1;
-    y->height = MAX(HEIGHT(y->left), HEIGHT(y->right)) + 1;
+    y->height    = MAX(HEIGHT(y->left), HEIGHT(y->right)) + 1;
 
     *x = y;
 }
-
-
