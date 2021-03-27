@@ -1,0 +1,3 @@
+[submodule "cdot"]
+	path = cdot
+	url = git@github.com:jnguyen1098/cdot

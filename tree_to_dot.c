@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "../cdot/cdot.h"
+
 /* user may change these */
-#define BALANCE_AVL 0
+#define BALANCE_AVL 1
 #define NODES       100
 #define MAXVAL      1000
 
@@ -50,7 +52,8 @@ int main(void)
 {
     /* initializing */
     Node *root = NULL;
-    srand((unsigned int)time(NULL));
+    // srand((unsigned int)time(NULL));
+    srand(0);
 
     /* add random numbers to tree */
     for (int iter = 1; iter <= NODES; iter++)
@@ -73,35 +76,45 @@ int write_file(Node *tree, FILE *infp)
     fp = infp;
 
     /* header info */
-    fprintf(fp, "digraph G {\n");
-    fprintf(fp, "\tgraph [ordering=\"out\"];\n");
+    INIT_CDOT(fp);
 
     /* recursively write tree to file */
     write_line(tree);
 
     /* housekeeping */
-    fprintf(fp, "}");
+    DESTROY_CDOT();
     return 1;
 }
+
+char tree_data[BUFSIZ] = "";
+char tree_chld[BUFSIZ] = "";
 
 void write_line(Node *tree)
 {
     if (!tree) return;
 
     /* write node if exists */
-    if (tree->left)
-        fprintf(fp, "\t\"%d\" -> \"%d\"\n", tree->data, tree->left->data);
-    /* else just write a dot to represent NULL */
-    else {
-        fprintf(fp, "\tnull%d [shape=\"point\"]\n", i);
-        fprintf(fp, "\t\"%d\" -> null%d\n", tree->data, i++);
+    if (tree->left) {
+        sprintf(tree_data, "%d", tree->data);
+        sprintf(tree_chld, "%d", tree->left->data);
+        ADD_EDGE(tree_data, tree_chld);
     }
 
-    if (tree->right)
-        fprintf(fp, "\t\"%d\" -> \"%d\"\n", tree->data, tree->right->data);
+    /* else just write a dot to represent NULL */
     else {
-        fprintf(fp, "\tnull%d [shape=\"point\"]\n", i);
-        fprintf(fp, "\t\"%d\" -> null%d\n", tree->data, i++);
+        fprintf(fp, "%snull%d [shape=\"point\"];\n", INDENT, i);
+        fprintf(fp, "%s\"%d\" -> null%d;\n", INDENT, tree->data, i++);
+    }
+
+    if (tree->right) {
+        sprintf(tree_data, "%d", tree->data);
+        sprintf(tree_chld, "%d", tree->right->data);
+        ADD_EDGE(tree_data, tree_chld);
+    }
+
+    else {
+        fprintf(fp, "%snull%d [shape=\"point\"];\n", INDENT, i);
+        fprintf(fp, "%s\"%d\" -> null%d;\n", INDENT, tree->data, i++);
     }
 
     /* recurse */
