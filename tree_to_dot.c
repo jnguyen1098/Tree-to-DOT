@@ -10,7 +10,7 @@
 #define MAXVAL      1000
 
 /* inline functions */
-#define MAX(x,y) (x > y ? x : y)
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
 #define BALANCE(x) ((x) ? HEIGHT((x)->left) - HEIGHT((x)->right) : 0)
 #define HEIGHT(x) ((x) ? (x)->height : 0)
 

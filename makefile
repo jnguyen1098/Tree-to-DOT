@@ -47,6 +47,6 @@ clang-format:
 	diff -u <(clang-format $(SRC)/*.c) <(cat $(SRC)/*.c)
 
 clean:
-	rm -rf $(EXE) $(OBJS)
+	rm -rf $(EXE) $(OBJS) *.plist
 
 .PHONY: all run test lint cppcheck splint clang-analyze clang-tidy clang-format clean
