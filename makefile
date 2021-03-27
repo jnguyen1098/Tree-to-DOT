@@ -16,7 +16,7 @@ run: $(EXE)
 	./$(EXE)
 
 test: $(EXE)
-	diff -u <(./$(EXE)) old
+	diff -u <(./$(EXE)) old_output.out
 
 lint:
 	make cppcheck
@@ -39,12 +39,12 @@ clang-analyze:
 
 clang-tidy:
 	@echo "Running clang-tidy"
-	clang-tidy -checks=* $(SRC)/*.c -- -I$(INC)
+	clang-tidy -checks=* $(SRC)/*.c -header-filter=.* -- -I$(INC)
 
 clang-format:
 	@echo "Running clang-format"
-	diff -u <(clang-format $(INC)/*.h) <(cat $(INC)/*.h)
-	diff -u <(clang-format $(SRC)/*.c) <(cat $(SRC)/*.c)
+	diff -u <(cat $(SRC)/*.c) <(clang-format $(SRC)/*.c)
+	diff -u <(cat $(INC)/*.h) <(clang-format $(INC)/*.h)
 
 clean:
 	rm -rf $(EXE) $(OBJS) *.plist

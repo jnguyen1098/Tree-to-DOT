@@ -26,23 +26,23 @@ typedef struct tree_node {
 } Node;
 
 /* write file to output.dot */
-int write_file(Node *, FILE *);
+int write_file(Node *tree, FILE *infp);
 
 /* recursive line writer */
-void write_line(Node *);
+void write_line(Node *tree);
 
 /* function to insert node into tree */
-void add(Node **, int, WriteMode);
+void add(Node **tree, int data, WriteMode mode);
 
 /* node creation func. */
-Node *create(int);
+Node *create(int data);
 
 /* frees a binary tree */
-void free_tree(Node *);
+void free_tree(Node *tree);
 
 /* AVL rotation paradigms */
-void rightRotate(Node **);
-void leftRotate(Node **);
+void rightRotate(Node **y);
+void leftRotate(Node **x);
 
 /* yeah */
 static FILE *fp;
@@ -52,17 +52,17 @@ int main(void)
 {
     /* initializing */
     Node *root = NULL;
-    // srand((unsigned int)time(NULL));
-    srand(0);
+    srand((unsigned int)time(NULL));
 
     /* add random numbers to tree */
-    int iter;
-    for (iter = 1; iter <= NODES; iter++)
+    for (int iter = 1; iter <= NODES; iter++) {
         add(&root, rand() % MAXVAL + 1, BALANCE_AVL ? AVL : NORMAL);
+    }
 
     /* write to stdout (or file) */
-    if (write_file(root, stdout) == 0)
+    if ((write_file(root, stdout)) == 0) {
         fprintf(stderr, "Write failed\n");
+    }
 
     /* housekeeping */
     free_tree(root);
@@ -71,7 +71,9 @@ int main(void)
 
 int write_file(Node *tree, FILE *infp)
 {
-    if (!tree) return 0;
+    if (!tree) {
+        return 0;
+    }
 
     // so I don't pass fp into write_line every time
     fp = infp;
@@ -92,7 +94,9 @@ char tree_chld[BUFSIZ] = "";
 
 void write_line(Node *tree)
 {
-    if (!tree) return;
+    if (!tree) {
+        return;
+    }
 
     /* write node if exists */
     if (tree->left) {
@@ -121,7 +125,6 @@ void write_line(Node *tree)
     /* recurse */
     write_line(tree->left);
     write_line(tree->right);
-    return;
 }
 
 void add(Node **tree, int data, WriteMode mode)
@@ -133,16 +136,21 @@ void add(Node **tree, int data, WriteMode mode)
             exit(EXIT_FAILURE);
         }
     } else {
-        if ((*tree)->data > data)
+        if ((*tree)->data > data) {
             add(&((*tree)->left), data, mode);
-        else if ((*tree)->data < data)
+        }
+        else if ((*tree)->data < data) {
             add(&((*tree)->right), data, mode);
-        else // equal case...undefined
+        }
+        else { // equal case...undefined
             return;
+        }
     }
 
     /* AVL code to follow */
-    if (mode != AVL) return;
+    if (mode != AVL) {
+        return;
+    }
 
     /* update height */
     (*tree)->height = 1 + MAX(HEIGHT((*tree)->left), HEIGHT((*tree)->right));
@@ -151,11 +159,13 @@ void add(Node **tree, int data, WriteMode mode)
     int balance = BALANCE(*tree);
 
     /* single rotations */
-    if (balance > 1 && data < (*tree)->left->data)
+    if (balance > 1 && data < (*tree)->left->data) {
         rightRotate(tree);
+    }
 
-    else if (balance < -1 && data > (*tree)->right->data)
+    else if (balance < -1 && data > (*tree)->right->data) {
         leftRotate(tree);
+    }
 
     /* double rotations */
     else if (balance > 1 && data > (*tree)->left->data) {
@@ -167,8 +177,6 @@ void add(Node **tree, int data, WriteMode mode)
         rightRotate(&((*tree)->right));
         leftRotate(tree);
     }
-
-    return;
 }
 
 
@@ -186,11 +194,12 @@ Node *create(int data)
 
 void free_tree(Node *tree)
 {
-    if (!tree) return;
+    if (!tree) {
+        return;
+    }
     free_tree(tree->left);
     free_tree(tree->right);
     free(tree);
-    return;
 }
 
 
@@ -206,8 +215,6 @@ void rightRotate(Node **y)
     x->height = MAX(HEIGHT(x->left), HEIGHT(x->right)) + 1;
 
     *y = x;
-
-    return;
 }
 
 void leftRotate(Node **x)
@@ -222,7 +229,6 @@ void leftRotate(Node **x)
     y->height = MAX(HEIGHT(y->left), HEIGHT(y->right)) + 1;
 
     *x = y;
-    return;
 }
 
 
