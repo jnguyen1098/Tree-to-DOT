@@ -19,34 +19,9 @@ test: $(EXE)
 	diff -u <(./$(EXE)) old_output.out
 
 lint:
-	make cppcheck
-	make splint
-	make clang-analyze
-	make clang-tidy
-	make clang-format
-
-cppcheck:
-	@echo "Running cppcheck"
-	cppcheck --enable=all -I$(INC) --inconclusive -v $(SRC)
-
-splint:
-	@echo "Running splint"
-	splint -I$(INC) $(SRC)/*.c
-
-clang-analyze:
-	@echo "Running clang's static analyzer"
-	clang --analyze $(SRC)/*.c -I$(INC)
-
-clang-tidy:
-	@echo "Running clang-tidy"
-	clang-tidy -checks=* $(SRC)/*.c -header-filter=.* -- -I$(INC)
-
-clang-format:
-	@echo "Running clang-format"
-	diff -u <(cat $(SRC)/*.c) <(clang-format $(SRC)/*.c)
-	diff -u <(cat $(INC)/*.h) <(clang-format $(INC)/*.h)
+	make -f lintfile lint
 
 clean:
 	rm -rf $(EXE) $(OBJS) *.plist
 
-.PHONY: all run test lint cppcheck splint clang-analyze clang-tidy clang-format clean
+.PHONY: all run test lint clean
