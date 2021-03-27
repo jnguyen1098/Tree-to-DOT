@@ -55,11 +55,12 @@ int main(void)
     srand((unsigned int)time(NULL));
 
     /* add random numbers to tree */
-    for (int iter = 1; iter <= NODES; iter++)
+    int iter;
+    for (iter = 1; iter <= NODES; iter++)
         add(&root, rand() % MAXVAL + 1, BALANCE_AVL ? AVL : NORMAL);
 
     /* write to stdout (or file) */
-    if (!write_file(root, stdout))
+    if (write_file(root, stdout) == NULL)
         fprintf(stderr, "Write failed\n");
 
     /* housekeeping */
@@ -94,8 +95,8 @@ void write_line(Node *tree)
 
     /* write node if exists */
     if (tree->left) {
-        sprintf(tree_data, "%d", tree->data);
-        sprintf(tree_chld, "%d", tree->left->data);
+        snprintf(tree_data, BUFSIZ, "%d", tree->data);
+        snprintf(tree_chld, BUFSIZ, "%d", tree->left->data);
         ADD_EDGE(tree_data, tree_chld);
     }
 
@@ -106,8 +107,8 @@ void write_line(Node *tree)
     }
 
     if (tree->right) {
-        sprintf(tree_data, "%d", tree->data);
-        sprintf(tree_chld, "%d", tree->right->data);
+        snprintf(tree_data, BUFSIZ, "%d", tree->data);
+        snprintf(tree_chld, BUFSIZ, "%d", tree->right->data);
         ADD_EDGE(tree_data, tree_chld);
     }
 
@@ -126,7 +127,10 @@ void add(Node **tree, int data, WriteMode mode)
 {
     /* normal insertion paradigm */
     if (!*tree) {
-        *tree = create(data);
+        if ((*tree = create(data)) == NULL) {
+            fprintf(stderr, "Could not add data %d\n", data);
+            exit(EXIT_FAILURE);
+        }
     } else {
         if ((*tree)->data > data)
             add(&((*tree)->left), data, mode);
@@ -169,7 +173,11 @@ void add(Node **tree, int data, WriteMode mode)
 
 Node *create(int data)
 {
-    Node *ret = calloc(1, sizeof(Node));
+    Node *ret;
+    if ((ret = calloc(1, sizeof(Node))) == NULL) {
+        fprintf(stderr, "Could not create node for data %d\n", data);
+        exit(EXIT_FAILURE);
+    }
     ret->data = data;
     ret->height = 1; // height starts at 1
     return ret;
