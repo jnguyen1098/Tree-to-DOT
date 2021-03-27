@@ -52,7 +52,8 @@ int main(void)
 {
     /* initializing */
     Node *root = NULL;
-    srand((unsigned int)time(NULL));
+    // srand((unsigned int)time(NULL));
+    srand(0);
 
     /* add random numbers to tree */
     int iter;

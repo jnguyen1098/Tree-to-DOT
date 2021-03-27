@@ -1,5 +1,7 @@
 # makefile for tree_to_dot
 
+SHELL=/bin/bash
+
 EXE = tree
 OBJS = tree_to_dot.o
 DEPS = cdot/cdot.h
@@ -13,8 +15,8 @@ all $(EXE): $(OBJS) $(DEPS)
 run: $(EXE)
 	./$(EXE)
 
-clean:
-	rm -rf $(EXE) $(OBJS)
+test: $(EXE)
+	diff -u <(./$(EXE)) old
 
 lint:
 	make cppcheck
@@ -44,4 +46,7 @@ clang-format:
 	diff -u <(clang-format $(INC)/*.h) <(cat $(INC)/*.h)
 	diff -u <(clang-format $(SRC)/*.c) <(cat $(SRC)/*.c)
 
-.PHONY: all run clean lint cppcheck splint clang-analyze clang-tidy clang-format
+clean:
+	rm -rf $(EXE) $(OBJS)
+
+.PHONY: all run test lint cppcheck splint clang-analyze clang-tidy clang-format clean
